@@ -820,10 +820,47 @@ def postproc_batch_train_ann(self):
     pass
 
 
+
 def postproc_batch_train_snn(self):
     pass
     spike_count_batch_end(self)
+    global cnt_yc
+    global epoch_yc
+    #
+    header = ['name', 'spike_counts','normal']
+    epoch1 = ['epoch:1']
+    with open('spike_normal.csv', 'a', newline='') as csv_file:
+        csv_writer = csv.writer(csv_file)
 
+        if csv_file.tell() == 0:
+            csv_writer.writerow(header)
+            csv_writer.writerow(epoch1)
+    for neuron in self.model.layers_w_neuron:
+        name = neuron.name
+        spike_count = self.list_spike_count[name]
+        spike_count_np = spike_count.numpy()
+        dict = {}
+        dict['name'] = name
+        dict['spike_count'] = spike_count_np
+        with open('spike_normal.csv', 'a', newline='') as csv_file:
+            csv_writer = csv.writer(csv_file)
+            csv_writer.writerow([dict['name'], dict['spike_count']])
+
+        with open('spike_normal.csv', 'a', newline='') as csv_file:
+            csv_writer = csv.writer(csv_file)
+
+            if 'predictions' in name and cnt_yc != 501:
+                a = [f'iterate:{cnt_yc}']
+                csv_writer.writerow(a)
+                cnt_yc += 1
+            elif cnt_yc == 501:
+                cnt_yc = 1
+                epoch_yc += 1
+                b = [f'epoch:{epoch_yc}']
+                csv_writer.writerow(b)
+        # print(spike_count)
+
+    #self.spike_count_total
 
 ########################################
 # (on_train_epoch_end)

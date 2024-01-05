@@ -9,7 +9,7 @@ import os
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 #os.environ["CUDA_VISIBLE_DEVICES"]="0,2"
 #os.environ["CUDA_VISIBLE_DEVICES"]="4,7"
-os.environ["CUDA_VISIBLE_DEVICES"]="0"
+os.environ["CUDA_VISIBLE_DEVICES"]="7"
 #os.environ["CUDA_VISIBLE_DEVICES"]="0,1,2,3"
 #os.environ["CUDA_VISIBLE_DEVICES"]="0,1,2,3,4,5,6,7"
 #os.environ["CUDA_VISIBLE_DEVICES"]="0,1,2,3"
@@ -49,11 +49,11 @@ conf.debug_mode = True
 #conf.lmb = 1.0E-2
 
 #
-#conf.train_epoch = 90
+conf.train_epoch = 150
 #conf.step_decay_epoch = 30
 #conf.train_epoch = 10
 #conf.train_epoch = 10
-conf.num_train_data = 1000
+# conf.num_train_data = 1000
 #conf.idx_test_data=0
 #conf.num_test_data=1
 
@@ -94,8 +94,8 @@ conf.leak_const_init = 0.9
 
 
 # WTA-SNN
-if True:
-#if False:
+# if True:
+if False:
     conf.reg_spike_out = True
     conf.reg_spike_out_const = 3E-6
     conf.reg_spike_out_alpha = 4
@@ -108,8 +108,8 @@ if True:
 
 
 # spike reg - similar spike
-#if True:
-if False:
+if True:
+# if False:
     conf.reg_spike_out = True
     conf.reg_spike_out_const = 6E-2
     conf.reg_spike_out_alpha = 4

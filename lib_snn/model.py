@@ -45,6 +45,8 @@ from lib_snn.sim import glb_t
 from config import config
 conf = config.flags
 
+epoch_yc = 1
+cnt_yc = 1
 class Model(tf.keras.Model):
     count=0
     def __init__(self, inputs, outputs, batch_size, input_shape, num_class, conf, **kwargs):
@@ -1778,8 +1780,12 @@ class Model(tf.keras.Model):
         return self.compute_metrics(x, y, y_pred, sample_weight)
 
     def train_step_snn(self, data):
+        global epoch_yc
+        global cnt_yc
         x, y, sample_weight = data_adapter.unpack_x_y_sample_weight(data)
         #print(data)
+
+
         #print(x)
         #y=tf.reshape(y,[x.shape[0],y.shape[1]])
 
@@ -2007,11 +2013,12 @@ class Model(tf.keras.Model):
                 self.optimizer.apply_gradients(grads_accum_and_vars)
 
                 # print gradients
-                #if True:
-                if False:
+
+
+                if True:
+                    #if False:
                     print('')
                     print('gradients')
-
                     for gv in grads_accum_and_vars:
                         g = gv[0]
                         v = gv[1]
@@ -2020,11 +2027,45 @@ class Model(tf.keras.Model):
                         g_max = tf.reduce_max(g)
                         g_min = tf.reduce_min(g)
                         g_std = tf.math.reduce_std(g)
-                        if name == 'conv1/kernel:0':
-                            print("{:} - mean: {:e}, max: {:e}, min: {:e}, std: {:e}".format(name, g_mean, g_max, g_min, g_std))
+                        # if name == 'conv1/kernel:0':
+                        header = ['name', 'mean', 'max', 'min', 'std','sim_spike']
+                        epoch1 = ['epoch:1']
+                        if 'kernel' in name:
+                            # print("{:} - mean: {:e}, max: {:e}, min: {:e}, std: {:e}".format(name, g_mean, g_max, g_min, g_std))
+                            with open('grad_test_sim_spike.csv','a', newline='') as csv_file:
+                                csv_writer = csv.writer(csv_file)
+
+                                if csv_file.tell() == 0:
+                                    csv_writer.writerow(header)
+                                    csv_writer.writerow(epoch1)
+                            nmean = g_mean.numpy()
+                            nmax = g_max.numpy()
+                            nmin = g_min.numpy()
+                            nstd = g_std.numpy()
+                            dict = {}
+                            dict['name'] = name
+                            dict['mean'] = nmean
+                            dict['max'] = nmax
+                            dict['min'] = nmin
+                            dict['std'] = nstd
+                            with open('grad_test_sim_spike.csv','a', newline='') as csv_file:
+                                csv_writer = csv.writer(csv_file)
+                                csv_writer.writerow([dict['name'], dict['mean'], dict['max'], dict['min'], dict['std']])
+
+                            with open('grad_test_sim_spike.csv', 'a', newline='') as csv_file:
+                                csv_writer = csv.writer(csv_file)
+
+                                if 'predictions' in name and cnt_yc != 501:
+                                    a = [f'iterate:{cnt_yc}']
+                                    csv_writer.writerow(a)
+                                    cnt_yc += 1
+                                elif cnt_yc == 501:
+                                    cnt_yc = 1
+                                    epoch_yc += 1
+                                    b = [f'epoch:{epoch_yc}']
+                                    csv_writer.writerow(b)
 
                     print('')
-
                 #
                 #print('gradients')
                 #print(grads_accum_and_vars)
