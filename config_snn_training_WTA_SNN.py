@@ -24,7 +24,7 @@ conf = config.flags
 
 #
 conf.debug_mode = True
-#conf.verbose_snn_train = True
+# conf.verbose_snn_train = True
 #conf.verbose_visual = True
 
 
@@ -49,7 +49,7 @@ conf.debug_mode = True
 #conf.lmb = 1.0E-2
 
 #
-conf.train_epoch = 150
+conf.train_epoch = 300
 #conf.step_decay_epoch = 30
 #conf.train_epoch = 10
 #conf.train_epoch = 10

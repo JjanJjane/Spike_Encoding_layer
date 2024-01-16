@@ -525,6 +525,7 @@ def batch_normalization_new(x,
         #
         dstop=tf.stop_gradient
 
+        # data save_yc
         #if False:
         #if True:
         if conf.verbose_snn_train:

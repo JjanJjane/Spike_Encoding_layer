@@ -2014,11 +2014,122 @@ class Model(tf.keras.Model):
 
                 # print gradients
 
-
                 if True:
                     #if False:
-                    print('')
-                    print('gradients')
+                    # print('')
+                    # print('gradients')
+                    # result = []
+                    for gv in grads_accum_and_vars:
+                        g = gv[0]
+                        v = gv[1]
+                        name = v.name
+                        g_mean = tf.reduce_mean(g)
+                        g_max = tf.reduce_max(g)
+                        g_min = tf.reduce_min(g)
+                        g_std = tf.math.reduce_std(g)
+                        # if name == 'conv1/kernel:0':
+                        header = ['name', 'mean', 'max', 'min', 'std','WTA-SNN']
+                        header_err = ['num', 'mean', 'max', 'min', 'std','WTA-SNN']
+                        epoch1 = ['epoch:1']
+                        print(name)
+                        if 'kernel' in name:
+                            if 'predictions' in name:
+                                with open('error_sim_spike_all.csv', 'a', newline='') as csv_file:
+                                    csv_writer = csv.writer(csv_file)
+
+                                    if csv_file.tell() == 0:
+                                        csv_writer.writerow(header_err)
+                                        csv_writer.writerow(epoch1)
+                                with open('error_sim_spike_cer.csv', 'a', newline='') as csv_file:
+                                    csv_writer = csv.writer(csv_file)
+
+                                    if csv_file.tell() == 0:
+                                        csv_writer.writerow(header_err)
+                                err = y - y_pred
+                                e_mean = tf.reduce_mean(err)
+                                e_max = tf.reduce_max(err)
+                                e_min = tf.reduce_min(err)
+                                e_std = tf.math.reduce_std(err)
+                                enmean = abs(e_mean.numpy())
+                                enmax = abs(e_max.numpy())
+                                enmin = abs(e_min.numpy())
+                                enstd = abs(e_std.numpy())
+                                dict_err = {}
+                                dict_err['iter'] = cnt_yc-1
+                                dict_err['mean'] = abs(nmean)
+                                dict_err['max'] = abs(nmax)
+                                dict_err['min'] = abs(nmin)
+                                dict_err['std'] = abs(nstd)
+                                dict_err['epoch'] = epoch_yc
+                                with open('error_sim_spike_all.csv', 'a', newline='') as csv_file:
+                                    csv_writer = csv.writer(csv_file)
+                                    csv_writer.writerow([dict_err['iter'], dict_err['mean'], dict_err['max'], dict_err['min'], dict_err['std']])
+
+                                    if cnt_yc == 501:
+                                        b = [f'epoch:{epoch_yc + 1}']
+                                        csv_writer.writerow(b)
+                                with open('error_sim_spike_cer.csv', 'a', newline='') as csv_file:
+                                    csv_writer = csv.writer(csv_file)
+
+                                    if cnt_yc == 501:
+                                        csv_writer.writerow([dict_err['epoch'], dict_err['mean'], dict_err['max'], dict_err['min'],dict_err['std']])
+                            # print("{:} - mean: {:e}, max: {:e}, min: {:e}, std: {:e}".format(name, g_mean, g_max, g_min, g_std))
+                            with open('grad_sim_spike_all.csv','a', newline='') as csv_file:
+                                csv_writer = csv.writer(csv_file)
+
+                                if csv_file.tell() == 0:
+                                    csv_writer.writerow(header)
+                                    csv_writer.writerow(epoch1)
+                            with open('grad_sim_spike_cer.csv', 'a', newline='') as csv_file:
+                                csv_writer = csv.writer(csv_file)
+
+                                if csv_file.tell() == 0:
+                                    csv_writer.writerow(header)
+                                    csv_writer.writerow(epoch1)
+                            nmean = g_mean.numpy()
+                            nmax = g_max.numpy()
+                            nmin = g_min.numpy()
+                            nstd = g_std.numpy()
+                            dict = {}
+                            dict['name'] = name
+                            dict['mean'] = abs(nmean)
+                            dict['max'] = abs(nmax)
+                            dict['min'] =abs(nmin)
+                            dict['std'] = abs(nstd)
+                            # with open('grad_WTA-SNN_sev.csv', 'a', newline='') as csv_file:
+                            #     csv_writer = csv.writer(csv_file)
+                            #
+                            #     if 'conv1/kernel:0' in name and cnt_yc != 501:
+                            #         a = [f'iterate:{cnt_yc}']
+                            #         csv_writer.writerow(a)
+                            with open('grad_sim_spike_all.csv', 'a', newline='') as csv_file:
+                                csv_writer = csv.writer(csv_file)
+
+                                if 'conv1/kernel:0' in name and cnt_yc != 501:
+                                    a = [f'iterate:{cnt_yc}']
+                                    csv_writer.writerow(a)
+                                    cnt_yc += 1
+                            with open('grad_sim_spike_cer.csv','a', newline='') as csv_file:
+                                csv_writer = csv.writer(csv_file)
+                                if cnt_yc == 501:
+                                    csv_writer.writerow([dict['name'], dict['mean'], dict['max'], dict['min'], dict['std']])
+                                    if 'predictions' in name:
+                                        epoch_yc += 1
+                                        b = [f'epoch:{epoch_yc}']
+                                        csv_writer.writerow(b)
+                            with open('grad_sim_spike_all.csv','a', newline='') as csv_file:
+                                csv_writer = csv.writer(csv_file)
+                                csv_writer.writerow([dict['name'], dict['mean'], dict['max'], dict['min'], dict['std']])
+                                if 'predictions' in name and cnt_yc == 501:
+                                    # epoch_yc += 1
+                                    b = [f'epoch:{epoch_yc}']
+                                    csv_writer.writerow(b)
+                                    cnt_yc = 1
+
+                # if True:
+                if False:
+                    # print('')
+                    # print('gradients')
                     for gv in grads_accum_and_vars:
                         g = gv[0]
                         v = gv[1]
@@ -2032,7 +2143,7 @@ class Model(tf.keras.Model):
                         epoch1 = ['epoch:1']
                         if 'kernel' in name:
                             # print("{:} - mean: {:e}, max: {:e}, min: {:e}, std: {:e}".format(name, g_mean, g_max, g_min, g_std))
-                            with open('grad_test_sim_spike.csv','a', newline='') as csv_file:
+                            with open('grad_sim_spike.csv','a', newline='') as csv_file:
                                 csv_writer = csv.writer(csv_file)
 
                                 if csv_file.tell() == 0:
@@ -2044,28 +2155,28 @@ class Model(tf.keras.Model):
                             nstd = g_std.numpy()
                             dict = {}
                             dict['name'] = name
-                            dict['mean'] = nmean
-                            dict['max'] = nmax
-                            dict['min'] = nmin
-                            dict['std'] = nstd
-                            with open('grad_test_sim_spike.csv','a', newline='') as csv_file:
-                                csv_writer = csv.writer(csv_file)
-                                csv_writer.writerow([dict['name'], dict['mean'], dict['max'], dict['min'], dict['std']])
-
-                            with open('grad_test_sim_spike.csv', 'a', newline='') as csv_file:
+                            dict['mean'] = abs(nmean)
+                            dict['max'] = abs(nmax)
+                            dict['min'] = abs(nmin)
+                            dict['std'] = abs(nstd)
+                            with open('grad_sim_spike.csv', 'a', newline='') as csv_file:
                                 csv_writer = csv.writer(csv_file)
 
-                                if 'predictions' in name and cnt_yc != 501:
+                                if 'conv1/kernel:0' in name and cnt_yc != 501:
                                     a = [f'iterate:{cnt_yc}']
                                     csv_writer.writerow(a)
                                     cnt_yc += 1
-                                elif cnt_yc == 501:
-                                    cnt_yc = 1
+                            with open('grad_sim_spike.csv','a', newline='') as csv_file:
+                                csv_writer = csv.writer(csv_file)
+                                csv_writer.writerow([dict['name'], dict['mean'], dict['max'], dict['min'], dict['std']])
+                                if 'predictions' in name and cnt_yc == 501:
                                     epoch_yc += 1
                                     b = [f'epoch:{epoch_yc}']
                                     csv_writer.writerow(b)
+                                    cnt_yc = 1
 
-                    print('')
+
+                    # print('')
                 #
                 #print('gradients')
                 #print(grads_accum_and_vars)
