@@ -8,9 +8,20 @@ conf = config.flags
 #RED = [255,0,0]    # on
 #GREEN = [0,255,0]  # off
 
-RED = [1,0,0]
-GREEN = [0,1,0]
+#RED = [1,0,0]
+#GREEN = [0,1,0]
 
+#RED = [1,0]      # on
+#GREEN = [0,1]    # off
+
+RED = [0.1,0]      # on
+GREEN = [0,0.1]    # off
+
+#RED = [1]      # on
+#GREEN = [-1]    # off
+
+#RED = [0.1]      # on
+#GREEN = [-0.1]    # off
 
 #
 # this function is modified based on
@@ -39,7 +50,8 @@ def as_frame(events, labels, shape=None):
 
 
     #image = tf.zeros(image_shape,dtype=tf.uint8)
-    images = tf.zeros(image_shape,dtype=tf.int32)
+    #images = tf.zeros(image_shape,dtype=tf.int32)
+    images = tf.zeros(image_shape,dtype=tf.float32)
 
 
     #colors = tf.where(tf.expand_dims(polarity,1),[255,0,0],[0,255,0])
@@ -116,7 +128,8 @@ def as_frames(
 
     #frame_data = np.zeros((num_frames, *shape, 3), dtype=np.uint8)
 
-    images = tf.zeros(image_shape,dtype=tf.int32)
+    #images = tf.zeros(image_shape,dtype=tf.int32)
+    images = tf.zeros(image_shape,dtype=tf.float32)
 
     #if polarity is None:
     #    colors = WHITE
@@ -138,23 +151,25 @@ def as_frames(
     #crop_size = 36
     s=48
     crop_size = 52
+    #crop_size = 50
 
     if augmentation:
         image_resize_size = crop_size
     else:
         image_resize_size = s
-    images=tf.image.resize(images,(image_resize_size,image_resize_size),method='lanczos3')   # VGG, ResNet
-
+    #images=tf.image.resize(images,(image_resize_size,image_resize_size),method='lanczos3')   # VGG, ResNet
+    #images=tf.image.resize(images,(image_resize_size,image_resize_size),method='bilinear')   # VGG, ResNet
+    images=tf.image.resize(images,(s,s),method='bilinear')   # VGG, ResNet
 
 
     if augmentation:
+        images = tf.image.pad_to_bounding_box(images, 1, 1, crop_size, crop_size)  # zero padding
         #images = tf.image.resize(images, (s, s))
         #images = tf.image.random_crop(images, (num_frames,crop_size,crop_size,3))    # random crop
         #images=tf.image.resize(images,(crop_size,crop_size),method='lanczos3')   # VGG, ResNet
-        images = tf.image.random_crop(images, (num_frames,s,s,3))    # random crop
+        images = tf.image.random_crop(images, (num_frames,s,s,2))    # random crop
         images=tf.image.random_flip_left_right(images)
         images=tf.image.random_flip_up_down(images)
-
 
 
 
