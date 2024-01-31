@@ -15,7 +15,8 @@
 """Implementation of Neural Net (NN) functions."""
 
 import math
-
+import os
+import csv
 from tensorflow.python.distribute import distribution_strategy_context as ds
 from tensorflow.python.framework import constant_op
 from tensorflow.python.framework import ops
@@ -44,6 +45,7 @@ from tensorflow.python.util.tf_export import tf_export
 import tensorflow as tf
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 import math
 
@@ -56,9 +58,14 @@ from absl import flags
 conf = flags.FLAGS
 
 
+
+cnt_layer=1
+epoch_yc=2
+cnt_iter=1
 # @tf_export("nn.batch_normalization")
 @tf.custom_gradient
 @dispatch.add_dispatch_support
+
 def batch_normalization(x,
                         mean,
                         variance,
@@ -121,7 +128,9 @@ def batch_normalization(x,
 
     # func input: x, mean, variance, scale, offset, variance_epsilon
     def grad(upstream):
-
+        global cnt_layer
+        global cnt_iter
+        global epoch_yc
         #
         mm = mean
         mv = variance
@@ -168,6 +177,48 @@ def batch_normalization(x,
         #
         dstop=tf.stop_gradient
 
+        #BN data save_yc
+        if False:
+            dx_mean = abs(tf.reduce_mean(dx).numpy())
+            dx_max = abs(tf.reduce_max(dx).numpy())
+            dx_min = abs(tf.reduce_min(dx).numpy())
+            dx_std = abs(tf.math.reduce_std(dx).numpy())
+
+            header = ['iter', 'mean', 'max', 'min', 'std']
+            epoch1 = ['epoch:1']
+            with open('BN_grad_sim_A.csv', 'a', newline='') as csv_file:
+                csv_writer = csv.writer(csv_file)
+
+                if csv_file.tell() == 0:
+                    csv_writer.writerow(header)
+                    csv_writer.writerow(epoch1)
+            dict = {}
+            dict['iter'] = cnt_iter
+            dict['mean'] = dx_mean
+            dict['max'] = dx_max
+            dict['min'] = dx_min
+            dict['std'] = dx_std
+            dict['layer'] = cnt_layer
+            dict['epoch'] = epoch_yc
+            with open('BN_grad_sim_A.csv', 'a', newline='') as csv_file:
+                csv_writer = csv.writer(csv_file)
+
+                if cnt_iter != 501:
+                    csv_writer.writerow([dict['layer'],dict['iter'],dict['mean'],dict['max'],dict['min'],dict['std']])
+                    cnt_iter += 1
+                if cnt_iter == 501:
+                    cnt_iter = 1
+                    b = [epoch_yc]
+                    csv_writer.writerow(b)
+                    csv_writer.writerow([dict['layer'],dict['iter'],dict['mean'],dict['max'],dict['min'],dict['std']])
+                    epoch_yc += 1
+            cnt_layer += 1
+
+            if cnt_layer == 16:
+                cnt_layer = 1
+
+        # else:
+            # cnt_layer += 1
         #if False:
         #if True:
         if conf.verbose_snn_train:
@@ -484,7 +535,9 @@ def batch_normalization_new(x,
 
     # func input: x, mean, variance, scale, offset, variance_epsilon
     def grad(upstream):
-
+        global cnt_layer
+        global epoch_yc
+        global cnt_iter
         #
         mm = mean
         mv = variance
@@ -533,6 +586,48 @@ def batch_normalization_new(x,
         dstop=tf.stop_gradient
 
         # data save_yc
+        if cnt_layer == 1:
+            dx_mean = abs(tf.reduce_mean(dx).numpy())
+            dx_max = abs(tf.reduce_max(dx).numpy())
+            dx_min = abs(tf.reduce_min(dx).numpy())
+            dx_std = abs(tf.math.reduce_std(dx).numpy())
+
+            header = ['iter', 'mean', 'max', 'min', 'std']
+            epoch1 = ['epoch:1']
+            with open('BN_grad_sim_spike.csv', 'a', newline='') as csv_file:
+                csv_writer = csv.writer(csv_file)
+
+                if csv_file.tell() == 0:
+                    csv_writer.writerow(header)
+                    csv_writer.writerow(epoch1)
+            dict = {}
+            dict['iter'] = cnt_iter
+            dict['mean'] = dx_mean
+            dict['max'] = dx_max
+            dict['min'] = dx_min
+            dict['std'] = dx_std
+            dict['epoch'] = epoch_yc
+            with open('BN_grad_sim_spike.csv', 'a', newline='') as csv_file:
+                csv_writer = csv.writer(csv_file)
+
+                if cnt_iter != 501:
+                    csv_writer.writerow([dict['iter'],dict['mean'],dict['max'],dict['min'],dict['std']])
+                    cnt_iter += 1
+                if cnt_iter == 501:
+                    cnt_iter = 1
+                    csv_writer.writerow(dict['epoch'])
+                    csv_writer.writerow([dict['iter'],dict['mean'],dict['max'],dict['min'],dict['std']])
+                    epoch_yc += 1
+
+        elif cnt_layer == 15:
+            cnt_layer = 1
+
+        else:
+            cnt_layer += 1
+
+
+
+
         #if False:
         #if True:
         if conf.verbose_snn_train:

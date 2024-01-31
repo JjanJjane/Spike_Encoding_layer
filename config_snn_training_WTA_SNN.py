@@ -23,13 +23,13 @@ from config import config
 conf = config.flags
 
 #
-conf.debug_mode = True
+# conf.debug_mode = True
 # conf.verbose_snn_train = True
 #conf.verbose_visual = True
 
 
 #
-conf.mode='inference'
+# conf.mode='inference'
 ##conf.batch_size_inf=100
 #conf.batch_size=400
 #conf.batch_size=200
@@ -44,7 +44,7 @@ conf.mode='inference'
 #conf.time_step=4
 #conf.name_model_load='./models/VGG16_AP_CIFAR100/ep-300_bat-100_opt-SGD_lr-STEP-1E-01_lmb-1E-04_sc_cm_ts-4_nc-R-R_nr-z'
 
-conf.root_model_load='./models_ckpt_WTA-SNN'
+# conf.root_model_load='./models_ckpt_WTA-SNN'
 
 #
 #conf.learning_rate = 0.1
@@ -80,7 +80,7 @@ conf.train_epoch = 300
 conf.pooling_vgg = 'avg'
 
 conf.nn_mode = 'SNN'
-#conf.nn_mode = 'ANN'
+# conf.nn_mode = 'ANN'
 
 conf.n_reset_type = 'reset_by_sub'
 #conf.n_reset_type = 'reset_to_zero'
@@ -119,7 +119,7 @@ conf.leak_const_init = 0.9
 mode='NORMAL'
 #mode='WTA-SNN_1'
 #mode='WTA-SNN_2'
-#mode='SIM-A'
+# mode='SIM-A'
 #mode='SIM-S'
 
 # WTA-SNN
@@ -127,8 +127,8 @@ mode='NORMAL'
 #if False:
 
 if mode=='NORMAL':
-    conf.name_model_load="./models_ckpt_WTA-SNN/VGG16_AP_CIFAR10/ep-300_bat-100_opt-SGD_lr-STEP-1E-01_lmb-1E-04_sc_cm_ts-4_nc-R-R_nr-s"
-
+    # conf.name_model_load="./models_ckpt_WTA-SNN/VGG16_AP_CIFAR10/ep-300_bat-100_opt-SGD_lr-STEP-1E-01_lmb-1E-04_sc_cm_ts-4_nc-R-R_nr-s"
+    pass
 elif mode=='WTA-SNN_1':
     #conf.name_model_load='./models_ckpt_WTA-SNN/VGG16_AP_CIFAR10/ep-300_bat-100_opt-SGD_lr-STEP-1E-01_lmb-1E-04_sc_cm_ts-4_nc-R-R_nr-s_r-sc-sm-5e-06_4'
     conf.reg_spike_out = True
