@@ -53,7 +53,7 @@ conf = config.flags
 #conf.lr_schedule = None
 
 #
-conf.train_epoch = 300
+#conf.train_epoch = 90
 #conf.step_decay_epoch = 30
 #conf.train_epoch = 10
 #conf.train_epoch = 10
@@ -80,7 +80,7 @@ conf.train_epoch = 300
 conf.pooling_vgg = 'avg'
 
 conf.nn_mode = 'SNN'
-# conf.nn_mode = 'ANN'
+#conf.nn_mode = 'ANN'
 
 conf.n_reset_type = 'reset_by_sub'
 #conf.n_reset_type = 'reset_to_zero'
@@ -114,9 +114,13 @@ conf.leak_const_init = 0.9
 ##conf.reg_spike_out_sc_sq=True
 #conf.reg_spike_out_norm = True
 
+conf.reg_spike_vis_fmap_sc=True
 
 # trained model
-mode='NORMAL'
+mode=conf.trained_model_reg_spike
+
+
+#mode='NORMAL'
 #mode='WTA-SNN_1'
 #mode='WTA-SNN_2'
 # mode='SIM-A'
@@ -127,9 +131,10 @@ mode='NORMAL'
 #if False:
 
 if mode=='NORMAL':
-    # conf.name_model_load="./models_ckpt_WTA-SNN/VGG16_AP_CIFAR10/ep-300_bat-100_opt-SGD_lr-STEP-1E-01_lmb-1E-04_sc_cm_ts-4_nc-R-R_nr-s"
+    #conf.name_model_load="./models_ckpt_WTA-SNN/VGG16_AP_CIFAR10/ep-300_bat-100_opt-SGD_lr-STEP-1E-01_lmb-1E-04_sc_cm_ts-4_nc-R-R_nr-s"
     pass
-elif mode=='WTA-SNN_1':
+
+elif mode=='WTA-1':
     #conf.name_model_load='./models_ckpt_WTA-SNN/VGG16_AP_CIFAR10/ep-300_bat-100_opt-SGD_lr-STEP-1E-01_lmb-1E-04_sc_cm_ts-4_nc-R-R_nr-s_r-sc-sm-5e-06_4'
     conf.reg_spike_out = True
     conf.reg_spike_out_const = 3E-6
@@ -143,7 +148,7 @@ elif mode=='WTA-SNN_1':
 elif mode=='WTA-SNN_2':
     #conf.name_model_load='./models_ckpt_WTA-SNN/VGG16_AP_CIFAR10/ep-300_bat-100_opt-SGD_lr-STEP-1E-01_lmb-1E-04_sc_cm_ts-4_nc-R-R_nr-s_r-sc-sm-2e-05_4'
     conf.reg_spike_out = True
-    conf.reg_spike_out_const = xxx
+    conf.reg_spike_out_const = 1E-5
     conf.reg_spike_out_alpha = 4
     conf.reg_spike_out_sc=True
     #conf.reg_spike_out_sc_wta=False
@@ -165,9 +170,9 @@ elif mode=='SIM-A':
     conf.reg_spike_out_norm = True
 elif mode=='SIM-S':
     # spike reg - similar acc
-    conf.name_model_load='./models_ckpt_WTA-SNN/VGG16_AP_CIFAR10/ep-300_bat-100_opt-SGD_lr-STEP-1E-01_lmb-1E-04_sc_cm_ts-4_nc-R-R_nr-s_r-sc-nwta-sm-0.3_4'
+    #conf.name_model_load='./models_ckpt_WTA-SNN/VGG16_AP_CIFAR10/ep-300_bat-100_opt-SGD_lr-STEP-1E-01_lmb-1E-04_sc_cm_ts-4_nc-R-R_nr-s_r-sc-nwta-sm-0.3_4'
     conf.reg_spike_out = True
-    conf.reg_spike_out_const = xxx
+    conf.reg_spike_out_const = 2.4E-1
     conf.reg_spike_out_alpha = 4
     conf.reg_spike_out_sc=True
     conf.reg_spike_out_sc_wta=False

@@ -42,8 +42,8 @@ conf = config.flags
 
 
 #
-conf.learning_rate = 0.3
-conf.lmb = 1E-4
+#conf.learning_rate = 0.2
+#conf.lmb = 1E-4
 #conf.time_step = 4
 #conf.optimizer = 'ADAM'
 #conf.lr_schedule = None
@@ -62,7 +62,7 @@ conf.model='VGG16'
 
 #conf.dataset='CIFAR100'
 #conf.dataset='ImageNet'
-conf.dataset='CIFAR10_DVS'
+#conf.dataset='CIFAR10_DVS'
 
 
 conf.pooling_vgg = 'avg'
@@ -93,15 +93,16 @@ conf.leak_const_init = 0.9
 
 #
 if False:
+#if True:
     if True:
         #if False:
         conf.reg_spike_out=True
-        conf.reg_spike_out_const=5E-6
+        conf.reg_spike_out_const=2.75E-5
         conf.reg_spike_out_alpha=4
         conf.reg_spike_out_sc=True
         #conf.reg_spike_out_sc_wta=False
         #conf.reg_spike_out_sc_train=True
-        #conf.reg_spike_out_sc_sm=True
+        conf.reg_spike_out_sc_sm=True
         #conf.reg_spike_out_sc_sq=True
         conf.reg_spike_out_norm=True
 
