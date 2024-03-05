@@ -9,7 +9,7 @@ import os
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 #os.environ["CUDA_VISIBLE_DEVICES"]="0,2"
 #os.environ["CUDA_VISIBLE_DEVICES"]="4,7"
-os.environ["CUDA_VISIBLE_DEVICES"]="7"
+os.environ["CUDA_VISIBLE_DEVICES"]="4"
 #os.environ["CUDA_VISIBLE_DEVICES"]="0,1,2,3"
 #os.environ["CUDA_VISIBLE_DEVICES"]="0,1,2,3,4,5,6,7"
 #os.environ["CUDA_VISIBLE_DEVICES"]="0,1,2,3"
@@ -23,13 +23,13 @@ from config import config
 conf = config.flags
 
 #
-# conf.debug_mode = True
-# conf.verbose_snn_train = True
+#conf.debug_mode = True
+#conf.verbose_snn_train = True
 #conf.verbose_visual = True
 
 
 #
-# conf.mode='inference'
+conf.mode='inference'
 ##conf.batch_size_inf=100
 #conf.batch_size=400
 #conf.batch_size=200
@@ -44,7 +44,7 @@ conf = config.flags
 #conf.time_step=4
 #conf.name_model_load='./models/VGG16_AP_CIFAR100/ep-300_bat-100_opt-SGD_lr-STEP-1E-01_lmb-1E-04_sc_cm_ts-4_nc-R-R_nr-z'
 
-# conf.root_model_load='./models_ckpt_WTA-SNN'
+conf.root_model_load='/home/sspark/models_WTA_SNN_TMP/models_ckpt_WTA-SNN'
 
 #
 #conf.learning_rate = 0.1
@@ -79,8 +79,8 @@ conf = config.flags
 
 conf.pooling_vgg = 'avg'
 
-# conf.nn_mode = 'SNN'
-conf.nn_mode = 'ANN'
+conf.nn_mode = 'SNN'
+#conf.nn_mode = 'ANN'
 
 conf.n_reset_type = 'reset_by_sub'
 #conf.n_reset_type = 'reset_to_zero'
@@ -114,16 +114,18 @@ conf.leak_const_init = 0.9
 ##conf.reg_spike_out_sc_sq=True
 #conf.reg_spike_out_norm = True
 
-conf.reg_spike_vis_fmap_sc=True
+#conf.reg_spike_vis_fmap_sc=True
+#conf.debug_neuron_input=True
+conf.debug_syn_output=True
+
+#conf.sm_batch_index=1
 
 # trained model
 mode=conf.trained_model_reg_spike
-
-
-#mode='NORMAL'
-#mode='WTA-SNN_1'
-#mode='WTA-SNN_2'
-# mode='SIM-A'
+mode='NORMAL'
+#mode='WTA-1'
+#mode='WTA-2'
+#mode='SIM-A'
 #mode='SIM-S'
 
 # WTA-SNN
@@ -145,7 +147,7 @@ elif mode=='WTA-1':
     conf.reg_spike_out_sc_sm=True
     #conf.reg_spike_out_sc_sq=True
     conf.reg_spike_out_norm = True
-elif mode=='WTA-SNN_2':
+elif mode=='WTA-2':
     #conf.name_model_load='./models_ckpt_WTA-SNN/VGG16_AP_CIFAR10/ep-300_bat-100_opt-SGD_lr-STEP-1E-01_lmb-1E-04_sc_cm_ts-4_nc-R-R_nr-s_r-sc-sm-2e-05_4'
     conf.reg_spike_out = True
     conf.reg_spike_out_const = 1E-5
