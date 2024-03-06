@@ -335,6 +335,7 @@ class Neuron(tf.keras.layers.Layer):
     #@tf.function
     #@tf.custom_gradient
     #def call(self ,inputs ,t, training):
+
     def call(self, inputs, training=None):
 
 
@@ -601,7 +602,10 @@ class Neuron(tf.keras.layers.Layer):
         #self.vth.assign(tf.where(self.f_fire, self.vth*1.1, self.vth/1.1))
 
         if conf.adaptive_vth:
-            vth_step_scale = conf.adaptive_vth_scale
+            # spike_mean=tf.reduce_mean(self.spike_count_int)
+            # spike_numpy = spike_mean.numpy()
+            if tf.reduce_all(tf.equal(self.spike_count_int,0)):
+                vth_step_scale = conf.adaptive_vth_scale
             #vth = tf.where(self.f_fire, self.vth*vth_step_scale, self.vth/vth_step_scale)
             #vth = tf.reduce_mean(vth,axis=0)
             ##self.vth.assign(tf.where(self.f_fire, self.vth*vth_step_scale, self.vth/vth_step_scale))
@@ -614,16 +618,21 @@ class Neuron(tf.keras.layers.Layer):
             #self.vth = vth
 
 
-            vth = self.vth.read(t-1)
+                vth = self.vth.read(t-1)
+            else:
+                vth_step_scale = 1.0
+                vth = self.vth_init
             #vth_update = tf.where(self.f_fire,vth*vth_step_scale,vth/vth_step_scale)
             #vth_update = vth*0.1
             #self.vth = self.vth.write(0,vth_update)
             if t < conf.time_step:
                 self.vth = self.vth.write(t,vth*vth_step_scale)
+                # print(vth)
         else:
             vth = self.vth.read(t-1)
             if t < conf.time_step:
                 self.vth = self.vth.write(t,vth)
+                # print(vth)
 
         #if True:
         #if False:
