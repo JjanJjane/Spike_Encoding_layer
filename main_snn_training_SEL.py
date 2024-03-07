@@ -54,8 +54,8 @@ with dist_strategy.scope():
         callbacks.callbacks_snn_train(model,train_ds_num,valid_ds,test_ds_num)
 
     #
-    if True:
-    # if False:
+    # if True:
+    if False:
         if config.train:
             print('Train mode')
 
@@ -71,8 +71,8 @@ with dist_strategy.scope():
             result = model.evaluate(test_ds, callbacks=callbacks_test)
 
 # visualization - feature map - spike count
-    if False:
-    # if True:
+#     if False:
+    if True:
         import tensorflow as tf
         import keras
         import matplotlib.pyplot as plt
@@ -117,7 +117,7 @@ with dist_strategy.scope():
             #
             for i in range(0,1):
                 result = model.evaluate(test_ds.skip(i).take(1), callbacks=callbacks_test)
-                for img_idx in range(20, 23):
+                for img_idx in [0,20,77]:
                     for layer_name, layer_fm in zip(layer_names,fm):
                         n_features = layer_fm.shape[-1]
                         size = layer_fm.shape[1]
