@@ -604,7 +604,10 @@ class Neuron(tf.keras.layers.Layer):
         if conf.adaptive_vth:
             # spike_mean=tf.reduce_mean(self.spike_count_int)
             # spike_numpy = spike_mean.numpy()
-            if tf.reduce_all(tf.equal(self.spike_count_int,0)):
+            # print(self.name)
+            # print(self.spike_count_int)
+            if self.name == 'n_conv1' and tf.reduce_all(tf.equal(self.spike_count_int,0)):
+                print(self.spike_count_int)
                 vth_step_scale = conf.adaptive_vth_scale
             #vth = tf.where(self.f_fire, self.vth*vth_step_scale, self.vth/vth_step_scale)
             #vth = tf.reduce_mean(vth,axis=0)
