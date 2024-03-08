@@ -70,12 +70,13 @@ conf.vrest = 0.0
 #conf.vrest_rand_static = False
 #conf.vrest_rand_static = True
 
-# conf.adaptive_vth = False
-conf.adaptive_vth = True
-conf.adaptive_vth_scale = 0.8
+conf.adaptive_vth = False
+# conf.adaptive_vth = True
+# conf.adaptive_vth_scale = 0.8
 
 #
-conf.reg_psp = True
+conf.reg_psp=True
+
 
 #conf.use_bn=False
 
