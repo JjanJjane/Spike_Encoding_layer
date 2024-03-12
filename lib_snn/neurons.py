@@ -600,42 +600,66 @@ class Neuron(tf.keras.layers.Layer):
         # fire
         #self.vth.assign(tf.where(self.f_fire, self.vth*1.1, self.vth*0.9))
         #self.vth.assign(tf.where(self.f_fire, self.vth*1.1, self.vth/1.1))
+        def evaluate_tensor(tensor):
+            return tensor.numpy()
 
-        if conf.adaptive_vth:
-            # spike_mean=tf.reduce_mean(self.spike_count_int)
-            # spike_numpy = spike_mean.numpy()
-            # print(self.name)
-            # print(self.spike_count_int)
-            if self.name == 'n_conv1' and tf.reduce_all(tf.equal(self.spike_count_int,0)):
-                print(self.spike_count_int)
-                vth_step_scale = conf.adaptive_vth_scale
-            #vth = tf.where(self.f_fire, self.vth*vth_step_scale, self.vth/vth_step_scale)
-            #vth = tf.reduce_mean(vth,axis=0)
-            ##self.vth.assign(tf.where(self.f_fire, self.vth*vth_step_scale, self.vth/vth_step_scale))
-            #self.vth.assign(vth)
-
-            #vth = tf.where(self.f_fire, self.vth*0.1, self.vth/0.1)
-            #self.vth = tf.cond(self.vth==0.5, lambda: self.vth*0.1, lambda: self.vth/0.1)
-            #vth = tf.cond(True, lambda: self.vth*0.1, lambda: self.vth/0.1)
-            #vth = tf.cond(self.f_fire, self.vth*vth_step_scale, self.vth/vth_step_scale)
-            #self.vth = vth
-
-
+        if conf.adaptive_vth_SEL:
+            if self.name == 'n_conv1':
+                channel_value = tf.reduce_sum(spike,axis=[1,2])
+                zero_indices= tf.where(tf.equal(channel_value,0))
                 vth = self.vth.read(t-1)
+                vth_step_scale = conf.adaptive_vth_scale
+                for idx in zero_indices:
+                    batch = idx[0]
+                    channel = idx[1]
+                    batch_mask = tf.equal(tf.range(100, dtype=tf.int64), batch)
+                    batch_mask = tf.expand_dims(tf.expand_dims(tf.expand_dims(batch_mask, axis=1),axis=2),axis=3)
+                    channel_mask = tf.equal(tf.range(64, dtype=tf.int64), channel)
+                    channel_mask = tf.expand_dims(tf.expand_dims(tf.expand_dims(channel_mask, axis=0),axis=0),axis=0)
+                    batch_mask = tf.broadcast_to(batch_mask, (100, 32, 32, 64))
+                    channel_mask = tf.broadcast_to(channel_mask, (100, 32, 32, 64))
+                    result = tf.logical_and(batch_mask, channel_mask)
+
+                    vth = tf.where(result, vth * vth_step_scale, vth)
+
+                if t < conf.time_step:
+                    self.vth = self.vth.write(t,vth)
             else:
-                vth_step_scale = 1.0
                 vth = self.vth_init
-            #vth_update = tf.where(self.f_fire,vth*vth_step_scale,vth/vth_step_scale)
-            #vth_update = vth*0.1
-            #self.vth = self.vth.write(0,vth_update)
-            if t < conf.time_step:
-                self.vth = self.vth.write(t,vth*vth_step_scale)
-                # print(vth)
+                if t< conf.time_step:
+                    self.vth = self.vth.write(t,vth)
+
         else:
             vth = self.vth.read(t-1)
             if t < conf.time_step:
                 self.vth = self.vth.write(t,vth)
-                # print(vth)
+
+
+
+        if False:
+            if conf.adaptive_vth:
+
+                vth_step_scale = conf.adaptive_vth_scale
+                #vth = tf.where(self.f_fire, self.vth*vth_step_scale, self.vth/vth_step_scale)
+                #vth = tf.reduce_mean(vth,axis=0)
+                ##self.vth.assign(tf.where(self.f_fire, self.vth*vth_step_scale, self.vth/vth_step_scale))
+                #self.vth.assign(vth)
+
+                #vth = tf.where(self.f_fire, self.vth*0.1, self.vth/0.1)
+                #self.vth = tf.cond(self.vth==0.5, lambda: self.vth*0.1, lambda: self.vth/0.1)
+                #vth = tf.cond(True, lambda: self.vth*0.1, lambda: self.vth/0.1)
+                #vth = tf.cond(self.f_fire, self.vth*vth_step_scale, self.vth/vth_step_scale)
+                #self.vth = vth
+                vth = self.vth.read(t-1)
+                #vth_update = tf.where(self.f_fire,vth*vth_step_scale,vth/vth_step_scale)
+                #vth_update = vth*0.1
+                #self.vth = self.vth.write(0,vth_update)
+                if t < conf.time_step:
+                    self.vth = self.vth.write(t,vth*vth_step_scale)
+            else:
+                vth = self.vth.read(t-1)
+                if t < conf.time_step:
+                    self.vth = self.vth.write(t,vth)
 
         #if True:
         #if False:

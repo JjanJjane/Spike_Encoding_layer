@@ -7,14 +7,14 @@
 import os
 #os.environ['NCCL_P2P_DISABLE']='1'
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="5"
+os.environ["CUDA_VISIBLE_DEVICES"]="6"
 
 #
 from config import config
 conf = config.flags
 
 #
-#conf.debug_mode = True
+# conf.debug_mode = True
 #conf.verbose_snn_train = True
 
 
@@ -28,7 +28,8 @@ conf = config.flags
 #conf.batch_size=120
 #conf.time_step=2
 # conf.name_model_load='./models_ckpt_SEL'
-# conf.name_model_load='./models_ckpt_SEL_0.8/VGG16_AP_CIFAR10/ep-300_bat-100_opt-SGD_lr-STEP-1E-01_lmb-1E-04_sc_cm_ts-4_nc-R-R_nr-s'
+conf.name_model_load='./models_ckpt_SEL_0.8/VGG16_AP_CIFAR10/ep-300_bat-100_opt-SGD_lr-STEP-1E-01_lmb-1E-04_sc_cm_ts-4_nc-R-R_nr-s'
+# conf.name_model_load='./models_ckpt/VGG16_AP_CIFAR10/ep-300_bat-100_opt-SGD_lr-STEP-1E-01_lmb-1E-04_sc_cm_ts-4_nc-R-R_nr-s_r-sc-nwta-sm-2e-05_4'
 # conf.name_model_load='./models_ckpt_SEL_loss/VGG16_AP_CIFAR10/ep-300_bat-100_opt-SGD_lr-STEP-1E-01_lmb-1E-04_sc_cm_ts-4_nc-R-R_nr-s_r-psp-ma-0.001_1e-10'
 
 
@@ -70,12 +71,12 @@ conf.vrest = 0.0
 #conf.vrest_rand_static = False
 #conf.vrest_rand_static = True
 
-conf.adaptive_vth = False
-# conf.adaptive_vth = True
-# conf.adaptive_vth_scale = 0.8
+# conf.adaptive_vth_SEL = False
+conf.adaptive_vth_SEL = True
+conf.adaptive_vth_scale = 0.8
 
 #
-conf.reg_psp=True
+# conf.reg_psp=True
 
 
 #conf.use_bn=False
@@ -135,7 +136,7 @@ conf.stdp_pathway_weight = 0.1
 #
 conf.save_best_model_only = True
 conf.save_models_max_to_keep = 1
-conf.root_model_save = './models_ckpt_SEL_0.8'
+conf.root_model_save = './models_ckpt_SEL_test'
 # conf.root_model_load = './models_ckpt_SEL'
 
 

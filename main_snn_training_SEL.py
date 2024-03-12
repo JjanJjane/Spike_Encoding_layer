@@ -8,6 +8,7 @@ from config_snn_training_SEL import config
 import lib_snn
 
 #
+import os
 import datasets
 import callbacks
 
@@ -117,7 +118,7 @@ with dist_strategy.scope():
             #
             for i in range(0,1):
                 result = model.evaluate(test_ds.skip(i).take(1), callbacks=callbacks_test)
-                for img_idx in [0,20,77]:
+                for img_idx in range(0,100):
                     for layer_name, layer_fm in zip(layer_names,fm):
                         n_features = layer_fm.shape[-1]
                         size = layer_fm.shape[1]
@@ -159,7 +160,7 @@ with dist_strategy.scope():
                         plt.axis("off")
 
                         plt.imshow(display_grid, aspect="auto", cmap="viridis")
-                        plt.show()
+                        # plt.show()
 
 
                         # channel intensity
@@ -191,12 +192,12 @@ with dist_strategy.scope():
 
                             layer_idx += 1
 
-                    # fname = '_'+str(i)+'_'+str(img_idx)+'.png'
-                    # folder = './result_fig_fm_sc_0050/'
-                    # try:
-                    #     if not os.path.exists(folder):
-                    #         os.makedirs(folder)
-                    # except:
-                        # print("Error: failed to create the directory")
-                    # plt.savefig(folder+fname)
+                    fname = '_'+str(i)+'_'+str(img_idx)+'.png'
+                    folder = './result_fig_SEL_adap_0_9/'
+                    try:
+                        if not os.path.exists(folder):
+                            os.makedirs(folder)
+                    except:
+                        print("Error: failed to create the directory")
+                    plt.savefig(folder+fname)
                     plt.close()

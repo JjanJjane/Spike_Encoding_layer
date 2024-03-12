@@ -629,6 +629,7 @@ flags.DEFINE_bool('vrest_rand_static',False,'vth random - N(vrest,0.1)')
 
 #
 flags.DEFINE_bool('adaptive_vth',False,'adaptive vth')
+flags.DEFINE_bool('adaptive_vth_SEL',False,'adaptive vth spiking encoding layer')
 #flags.DEFINE_bool('adaptive_vth',True,'adaptive vth')
 
 # flags.DEFINE_float('adaptive_vth_scale',1.1,'adaptive vth scale')
