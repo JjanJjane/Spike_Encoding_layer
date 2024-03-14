@@ -14,7 +14,7 @@ from config import config
 conf = config.flags
 
 #
-# conf.debug_mode = True
+conf.debug_mode = True
 #conf.verbose_snn_train = True
 
 
@@ -77,7 +77,7 @@ conf.adaptive_vth_scale = 0.8
 
 #
 # conf.reg_psp=True
-
+# conf.reg_psp_eps = 1.0
 
 #conf.use_bn=False
 
@@ -136,7 +136,7 @@ conf.stdp_pathway_weight = 0.1
 #
 conf.save_best_model_only = True
 conf.save_models_max_to_keep = 1
-conf.root_model_save = './models_ckpt_SEL_test'
+conf.root_model_save = './models_ckpt_SEL_adaptive_0_8'
 # conf.root_model_load = './models_ckpt_SEL'
 
 

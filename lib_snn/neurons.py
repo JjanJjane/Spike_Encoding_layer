@@ -606,21 +606,12 @@ class Neuron(tf.keras.layers.Layer):
         if conf.adaptive_vth_SEL:
             if self.name == 'n_conv1':
                 channel_value = tf.reduce_sum(spike,axis=[1,2])
-                zero_indices= tf.where(tf.equal(channel_value,0))
+                zero_mask = channel_value == 0
+                zero_mask = tf.expand_dims(tf.expand_dims(zero_mask,axis=1),axis=1)
                 vth = self.vth.read(t-1)
                 vth_step_scale = conf.adaptive_vth_scale
-                for idx in zero_indices:
-                    batch = idx[0]
-                    channel = idx[1]
-                    batch_mask = tf.equal(tf.range(100, dtype=tf.int64), batch)
-                    batch_mask = tf.expand_dims(tf.expand_dims(tf.expand_dims(batch_mask, axis=1),axis=2),axis=3)
-                    channel_mask = tf.equal(tf.range(64, dtype=tf.int64), channel)
-                    channel_mask = tf.expand_dims(tf.expand_dims(tf.expand_dims(channel_mask, axis=0),axis=0),axis=0)
-                    batch_mask = tf.broadcast_to(batch_mask, (100, 32, 32, 64))
-                    channel_mask = tf.broadcast_to(channel_mask, (100, 32, 32, 64))
-                    result = tf.logical_and(batch_mask, channel_mask)
 
-                    vth = tf.where(result, vth * vth_step_scale, vth)
+                vth = tf.where(zero_mask, vth * vth_step_scale, vth)
 
                 if t < conf.time_step:
                     self.vth = self.vth.write(t,vth)

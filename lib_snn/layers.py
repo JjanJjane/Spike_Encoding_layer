@@ -444,7 +444,7 @@ class Layer():
                 #print('reg_psp: {:}'.format(self.name))
                 lib_snn.layers.reg_psp(self,output)
 
-                if False:
+                if True:
                     #h_min = -1.0
                     #h_max = 1.0
                     h_min = tf.reduce_min(output)
@@ -463,10 +463,10 @@ class Layer():
                         pdf = tfp.distributions.Normal(mean,std)
                         p = pdf.prob(output)
 
-                        print("before")
-                        print(output)
-                        print("mean out: {:}, std out: {:}".format(mean,std))
-                        print("min p: {:}, max p: {:}".format(tf.reduce_min(p),tf.reduce_max(p)))
+                        # print("before")
+                        # print(output)
+                        # print("mean out: {:}, std out: {:}".format(mean,std))
+                        # print("min p: {:}, max p: {:}".format(tf.reduce_min(p),tf.reduce_max(p)))
 
 
                     #e = tf.math.multiply_no_nan(tf.math.log(p)/tf.math.log(tf.cast(2.0,dtype=tf.float64)),p)
@@ -475,13 +475,13 @@ class Layer():
                     #e = tf.where(p==0,tf.zeros(e.shape),e)
                     e = -tf.reduce_mean(e)
 
-                    print(self.name)
-                    print(e)
-                    print("min p: {:}, max p: {:}".format(tf.reduce_min(p),tf.reduce_max(p)))
+                    # print(self.name)
+                    # print(e)
+                    # print("min p: {:}, max p: {:}".format(tf.reduce_min(p),tf.reduce_max(p)))
 
-                    if tf.reduce_any(tf.math.is_nan(e)):
-                        print(self.name)
-                        print(e)
+                    # if tf.reduce_any(tf.math.is_nan(e)):
+                        # print(self.name)
+                        # print(e)
                         #print(output)
                         #assert False
 
