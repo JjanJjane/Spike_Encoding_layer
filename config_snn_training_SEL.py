@@ -14,7 +14,7 @@ from config import config
 conf = config.flags
 
 #
-conf.debug_mode = True
+# conf.debug_mode = True
 #conf.verbose_snn_train = True
 
 
@@ -28,8 +28,9 @@ conf.debug_mode = True
 #conf.batch_size=120
 #conf.time_step=2
 # conf.name_model_load='./models_ckpt_SEL'
-conf.name_model_load='./models_ckpt_SEL_0.8/VGG16_AP_CIFAR10/ep-300_bat-100_opt-SGD_lr-STEP-1E-01_lmb-1E-04_sc_cm_ts-4_nc-R-R_nr-s'
-# conf.name_model_load='./models_ckpt/VGG16_AP_CIFAR10/ep-300_bat-100_opt-SGD_lr-STEP-1E-01_lmb-1E-04_sc_cm_ts-4_nc-R-R_nr-s_r-sc-nwta-sm-2e-05_4'
+# conf.name_model_load='./models_ckpt_SEL_adaptive_0_8/VGG16_AP_CIFAR10/ep-300_bat-100_opt-SGD_lr-STEP-1E-01_lmb-1E-04_sc_cm_ts-4_nc-R-R_nr-s'
+# conf.name_model_load='./models_ckpt_SEL_adaptive_0_8/VGG16_AP_CIFAR10/ep-300_bat-100_opt-SGD_lr-STEP-1E-01_lmb-1E-04_sc_cm_ts-4_nc-R-R_nr-s_r-psp-ma-0.001_1e-10'
+conf.name_model_load='./models_ckpt_SEL_adaptive_0_9/VGG16_AP_CIFAR10/ep-300_bat-100_opt-SGD_lr-STEP-1E-01_lmb-1E-04_sc_cm_ts-4_nc-R-R_nr-s_r-psp-ma-0.001_1e-10'
 # conf.name_model_load='./models_ckpt_SEL_loss/VGG16_AP_CIFAR10/ep-300_bat-100_opt-SGD_lr-STEP-1E-01_lmb-1E-04_sc_cm_ts-4_nc-R-R_nr-s_r-psp-ma-0.001_1e-10'
 
 
@@ -73,11 +74,12 @@ conf.vrest = 0.0
 
 # conf.adaptive_vth_SEL = False
 conf.adaptive_vth_SEL = True
-conf.adaptive_vth_scale = 0.8
+conf.adaptive_dec_vth_scale = 0.7
+conf.adaptive_inc_vth_scale = 1.1
 
 #
-# conf.reg_psp=True
-# conf.reg_psp_eps = 1.0
+conf.reg_psp=True
+conf.reg_psp_SEL = 1
 
 #conf.use_bn=False
 
@@ -136,8 +138,8 @@ conf.stdp_pathway_weight = 0.1
 #
 conf.save_best_model_only = True
 conf.save_models_max_to_keep = 1
-conf.root_model_save = './models_ckpt_SEL_adaptive_0_8'
-# conf.root_model_load = './models_ckpt_SEL'
+conf.root_model_save = './models_ckpt_SEL_adaptive_0_7_reg'
+# conf.root_model_load = './models_ckpt_normal'
 
 
 #

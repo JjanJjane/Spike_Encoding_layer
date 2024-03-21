@@ -634,6 +634,8 @@ flags.DEFINE_bool('adaptive_vth_SEL',False,'adaptive vth spiking encoding layer'
 
 # flags.DEFINE_float('adaptive_vth_scale',1.1,'adaptive vth scale')
 flags.DEFINE_float('adaptive_vth_scale',0.9,'adaptive vth scale')
+flags.DEFINE_float('adaptive_dec_vth_scale',0.9,'adaptive vth scale')
+flags.DEFINE_float('adaptive_inc_vth_scale',1.1,'adaptive vth scale')
 
 
 # sptr
@@ -782,6 +784,7 @@ flags.DEFINE_bool('reg_spike_vis_fmap_sc',False,'regularization - spike, visuali
 # regularization - postsynaptic potential (PSP)
 flags.DEFINE_bool('reg_psp',False,'regularization - psp - entropy')
 flags.DEFINE_float('reg_psp_const',1E-3,'regularization - psp - entropy')
+flags.DEFINE_float('reg_psp_SEL',1,'regularization - psp - entropy')
 flags.DEFINE_float('reg_psp_eps',1E-10,'regularization - psp - entropy - epsilon in backward')
 flags.DEFINE_bool('reg_psp_min',False,'regularization - psp - entropy min / max')
 

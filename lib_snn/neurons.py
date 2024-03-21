@@ -608,10 +608,14 @@ class Neuron(tf.keras.layers.Layer):
                 channel_value = tf.reduce_sum(spike,axis=[1,2])
                 zero_mask = channel_value == 0
                 zero_mask = tf.expand_dims(tf.expand_dims(zero_mask,axis=1),axis=1)
+                one_mask = channel_value == 1
+                one_mask = tf.expand_dims(tf.expand_dims(one_mask,axis=1),axis=1)
                 vth = self.vth.read(t-1)
-                vth_step_scale = conf.adaptive_vth_scale
+                vth_dec_step_scale = conf.adaptive_dec_vth_scale
+                vth_inc_step_scale = conf.adaptive_inc_vth_scale
 
-                vth = tf.where(zero_mask, vth * vth_step_scale, vth)
+                vth = tf.where(zero_mask, vth * vth_dec_step_scale, vth)
+                vth = tf.where(one_mask, vth * vth_inc_step_scale, vth)
 
                 if t < conf.time_step:
                     self.vth = self.vth.write(t,vth)

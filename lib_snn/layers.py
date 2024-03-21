@@ -491,7 +491,7 @@ class Layer():
                     #self.add_loss(0.01*e)
                     # self.add_loss(conf.reg_syn_in_const*e)
                     if self.name == 'conv1':
-                        self.add_loss(-e)
+                        self.add_loss(-e * conf.reg_psp_SEL)
 
             #if conf.debug_syn_output:
             if hasattr(self, 'f_output_t'):

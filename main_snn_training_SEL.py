@@ -72,13 +72,19 @@ with dist_strategy.scope():
             result = model.evaluate(test_ds, callbacks=callbacks_test)
 
 # visualization - feature map - spike count
-    if False:
-    # if True:
+#     if False:
+    if True:
         import tensorflow as tf
         import keras
         import matplotlib.pyplot as plt
         import numpy as np
 
+        folder = './result_fig_SEL_adap_0_9_reg/'
+        try:
+            if not os.path.exists(folder):
+                os.makedirs(folder)
+        except:
+            print("Error: failed to create the directory")
 
         result = model.evaluate(test_ds.take(1), callbacks=callbacks_test)
         #result = model.evaluate(test_ds.take(10), callbacks=callbacks_test)
@@ -86,8 +92,8 @@ with dist_strategy.scope():
 
 
         # move to prop.py postproc_batch_test()
-        if True:
-        # if False:
+        # if True:
+        if False:
             fm = []
             layer_names = []
 
@@ -193,11 +199,6 @@ with dist_strategy.scope():
                             layer_idx += 1
 
                     fname = '_'+str(i)+'_'+str(img_idx)+'.png'
-                    folder = './result_fig_SEL_adap_0_9/'
-                    try:
-                        if not os.path.exists(folder):
-                            os.makedirs(folder)
-                    except:
-                        print("Error: failed to create the directory")
+
                     plt.savefig(folder+fname)
                     plt.close()
