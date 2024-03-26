@@ -67,6 +67,7 @@ def VGG16(
 
     #
     use_bn_feat = conf.use_bn
+    unuse_bn_conv1 = conf.unuse_bn_conv1
     use_bn_cls = conf.use_bn
 
     #
@@ -116,7 +117,9 @@ def VGG16(
     #
     #x = lib_snn.layers.Conv2D(channels, 3, padding='SAME', activation=act_relu, use_bn=use_bn_feat, kernel_initializer=k_init, en_tdbn=tdbn_first_layer, name='conv1')(x)
     syn_c1 = lib_snn.layers.Conv2D(channels, 3, padding='SAME', use_bn=use_bn_feat, kernel_initializer=k_init, name='conv1')(input)
-    if use_bn_feat:
+    if unuse_bn_conv1:
+        norm_c1 = syn_c1
+    elif use_bn_feat:
         norm_c1 = lib_snn.layers.BatchNormalization(en_tdbn=tdbn_first_layer,name='bn_conv1')(syn_c1)
     else:
         norm_c1 = syn_c1

@@ -386,6 +386,7 @@ flags.DEFINE_boolean('use_bias', True, 'use bias')
 
 #
 flags.DEFINE_boolean('use_bn', True, 'use batchnorm')
+flags.DEFINE_boolean('unuse_bn_conv1', False, 'unuse batchnorm in conv_1')
 #flags.DEFINE_boolean('use_bn', False, 'use batchnorm')
 
 #

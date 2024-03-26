@@ -72,14 +72,14 @@ with dist_strategy.scope():
             result = model.evaluate(test_ds, callbacks=callbacks_test)
 
 # visualization - feature map - spike count
-#     if False:
-    if True:
+    if False:
+    # if True:
         import tensorflow as tf
         import keras
         import matplotlib.pyplot as plt
         import numpy as np
 
-        folder = './result_fig_SEL_adap_0_9_reg/'
+        folder = './result_fig_SEL_adap_0_0_1_2_reg_10/'
         try:
             if not os.path.exists(folder):
                 os.makedirs(folder)
@@ -92,8 +92,8 @@ with dist_strategy.scope():
 
 
         # move to prop.py postproc_batch_test()
-        # if True:
-        if False:
+        if True:
+        # if False:
             fm = []
             layer_names = []
 
